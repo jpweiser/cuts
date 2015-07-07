@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+
+import argparse, sys, fileinput
+
+class Cutter() :
+    def __init__(self,fields,delimiter="\t"):
+        self.fields = fields
+        self.delimiter = delimiter
+
+    def fields(self,line,output=sys.stdout):
+        line = line.split(self.delimiter)
+
+        for field in self.fields :
+            try :
+                index = int(field)
+                if (index < len(line)) :
+                    output.write(line[index])
+                else :
+                    output.write("<NONE>")
+            except ValueError :
+                output.write(field)
+
+        output.write("\n")
+
+def main() :
+    parser = argparse.ArgumentParser(description="Remove and/or rearrange "
+        + "sections from each line of a file(s).")
+    parser.add_argument('-f',"--fields", action='store',default="",
+        help="Fields to select")
+    parser.add_argument('-d',"--delimiter", action='store',default="\t",
+        help="Sets field delimiter(default is TAB)")
+
+    parsed = parser.parse_args(sys.argv[1:])
+    cutter = Cutter(parsed.fields)
+
+
+    for line in sys.stdin:
+        cutter.fields("")
+
+
+if __name__ == '__main__':
+    main()
