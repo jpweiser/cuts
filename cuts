@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import argparse, sys
+import argparse, sys, fileinput
 
 class Cutter() :
     def __init__(self,fields,delimiter="\t",separator="\t"):
@@ -8,7 +8,7 @@ class Cutter() :
         self.delimiter = delimiter
         self.separator = separator
 
-    def printFields(self,line,output=sys.stdout):
+    def print_fields(self,line,output=sys.stdout):
 
         line = line.rstrip().split(self.delimiter)
 
@@ -38,24 +38,31 @@ class Cutter() :
         output.write("\n")
         return True
 
+def __lst(l):
+    return l.split(",")
+
 def main() :
     parser = argparse.ArgumentParser(description="Remove and/or rearrange "
         + "sections from each line of a file(s).")
-    parser.add_argument('-f',"--fields", action='store',default=[], nargs='+',
+    parser.add_argument('-f',"--fields", action='store', type=__lst,
         help="Fields to select")
     parser.add_argument('-d',"--delimiter", action='store',default="\t",
         help="Sets field delimiter(default is TAB)")
     parser.add_argument('-S', "--separator", action='store',default="\t",
         help="Sets field separator for output.")
+    parser.add_argument('file', nargs='*' ,default="-")
 
     parsed = parser.parse_args(sys.argv[1:])
     cutter = Cutter(parsed.fields, parsed.delimiter, parsed.separator)
 
-    for line in sys.stdin :
-        if not cutter.printFields(line) :
+    print parsed
+
+    for line in fileinput.input(parsed.file) :
+        if not cutter.print_fields(line) :
             sys.stderr.write(sys.argv[0] + ": Values may not include zero.\n")
             parser.print_usage(file=sys.stderr)
 
+    fileinput.close()
 
 if __name__ == '__main__':
     main()
