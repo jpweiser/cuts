@@ -3,25 +3,30 @@
 import argparse, sys
 
 class Cutter() :
-    def __init__(self,fields,delimiter="\t",spacer="\t"):
+    def __init__(self,fields,delimiter="\t",separator="\t"):
         self.fields = fields
         self.delimiter = delimiter
-        self.spacer = spacer
+        self.separator = separator
 
     def printFields(self,line,output=sys.stdout):
 
-        line = line.split(self.delimiter)
-        print line
+        line = line.rstrip().split(self.delimiter)
 
         lineNum = 0
         for field in self.fields :
-            lineNum += 1
             if lineNum > 0 :
-                output.write(self.spacer)
+                output.write(self.separator)
+
+            lineNum += 1
 
             try :
-
                 index = int(field)
+
+                if index > 0 :
+                    index -= 1
+                elif index == 0 :
+                    return False
+
                 try :
                     output.write(line[index])
                 except IndexError :
@@ -31,6 +36,7 @@ class Cutter() :
                 output.write(field)
 
         output.write("\n")
+        return True
 
 def main() :
     parser = argparse.ArgumentParser(description="Remove and/or rearrange "
@@ -39,13 +45,16 @@ def main() :
         help="Fields to select")
     parser.add_argument('-d',"--delimiter", action='store',default="\t",
         help="Sets field delimiter(default is TAB)")
+    parser.add_argument('-S', "--separator", action='store',default="\t",
+        help="Sets field separator for output.")
 
     parsed = parser.parse_args(sys.argv[1:])
-    cutter = Cutter(parsed.fields, parsed.delimiter)
-    print parsed
+    cutter = Cutter(parsed.fields, parsed.delimiter, parsed.separator)
 
     for line in sys.stdin :
-        cutter.printFields(line)
+        if not cutter.printFields(line) :
+            sys.stderr.write(sys.argv[0] + ": Values may not include zero.\n")
+            parser.print_usage(file=sys.stderr)
 
 
 if __name__ == '__main__':
