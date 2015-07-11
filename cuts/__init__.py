@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 
-from cutter import Cutter
-from fields import FieldCutter
-from main import main
+from cuts.cutter import Cutter
+from cuts.fields import FieldCutter
+from cuts.main import main
