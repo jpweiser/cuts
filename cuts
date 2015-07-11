@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import argparse, sys, fileinput
+import argparse, sys, fileinput, re
 
 class Cutter() :
     def __init__(self,fields,delimiter="\t",separator="\t"):
@@ -10,8 +10,8 @@ class Cutter() :
 
     def print_fields(self,line,output=sys.stdout):
 
-        line = line.rstrip().split(self.delimiter)
-
+        line = [el for el in line.rstrip().split(self.delimiter) if el != '']
+        print line
         lineNum = 0
         for field in self.fields :
             if lineNum > 0 :
@@ -42,9 +42,10 @@ def __lst(l):
     return l.split(",")
 
 def main() :
+
     parser = argparse.ArgumentParser(description="Remove and/or rearrange "
         + "sections from each line of a file(s).")
-    parser.add_argument('-f',"--fields", action='store', type=__lst,
+    parser.add_argument('-f',"--fields", action='store', type=__lst, default=[],
         help="Fields to select")
     parser.add_argument('-d',"--delimiter", action='store',default="\t",
         help="Sets field delimiter(default is TAB)")
@@ -53,6 +54,7 @@ def main() :
     parser.add_argument('file', nargs='*' ,default="-")
 
     parsed = parser.parse_args(sys.argv[1:])
+
     cutter = Cutter(parsed.fields, parsed.delimiter, parsed.separator)
 
     print parsed
