@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import argparse, sys, fileinput, re
-from fields import FieldCutter
+from cuts import FieldCutter
 
 def __lst(l):
     return l.split(",")
@@ -27,7 +27,6 @@ def main() :
         sys.exit(2)
 
     cutter = FieldCutter(parsed.fields, parsed.delimiter, parsed.separator)
-
 
     for line in fileinput.input(parsed.file) :
         print(cutter.cut(line))
