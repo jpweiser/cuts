@@ -11,9 +11,7 @@ class FieldCutter(Cutter) :
     def cut(self,line):
 
         result = ''
-
         # Remove empty strings in case of multiple instances of delimiter
-        #line = [el for el in line.rstrip().split(self.delimiter) if el != '']
         line = [x for x in re.split(self.delimiter, line.rstrip()) if x != '']
 
         lineStarted = False
