@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse, sys, fileinput, re
+from fields import FieldCutter
 
 def __lst(l):
     return l.split(",")
@@ -20,12 +21,16 @@ def main() :
 
     parsed = parser.parse_args(sys.argv[1:])
 
+    if '0' in parsed.fields :
+        print('Zero is an invalid field selection.')
+        parser.print_usage(file=sys.stderr)
+        sys.exit(2)
+
     cutter = FieldCutter(parsed.fields, parsed.delimiter, parsed.separator)
 
+
     for line in fileinput.input(parsed.file) :
-        if not cutter.cut(line) :
-            sys.stderr.write(sys.argv[0] + ": Values may not include zero.\n")
-            parser.print_usage(file=sys.stderr)
+        print(cutter.cut(line))
 
     fileinput.close()
 
