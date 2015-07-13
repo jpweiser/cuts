@@ -4,24 +4,15 @@ from cuts.cutter import Cutter
 
 class FieldCutter(Cutter) :
     def __init__(self,fields,delimiter="\t",separator="\t"):
-        super(FieldCutter,self).__init__(fields)
+        super(FieldCutter,self).__init__(fields,separator)
         self.delimiter = delimiter
-        self.separator = separator
 
     def cut(self,line):
-
         result = ''
         # Remove empty strings in case of multiple instances of delimiter
         line = [x for x in re.split(self.delimiter, line.rstrip()) if x != '']
 
-        lineStarted = False
-
         for field in self.positions :
-            if lineStarted :
-                result += self.separator
-
-            lineStarted = True
-
             try :
                 index = self.setup_index(field)
                 try :
