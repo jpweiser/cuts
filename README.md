@@ -39,6 +39,15 @@ optional arguments:
 The comma delimited list specifies the fields, which are separated by the
 input delimiter.
 
+Ranges are permitted in the list.
+N:M    All fields from N to M
+N:     All fields from N to end of line
+:M     All fields from beginning of line to M
+
+Negative indices are allowed, which start the count from the end.
+
+Non-numerical characters can be added to override output delimiter. 
+
 ## Delimiter
 (-d,--delimiter)=DELIM
 
