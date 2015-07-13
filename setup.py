@@ -9,10 +9,10 @@ config = {
     'description': 'Remove and/or rearrange sections from each line of a file(s).',
     'author': 'J.P. Weiser',
     'url': 'https://github.com/jpweiser/cuts',
-    'download_url': 'https://github.com/jpweiser/cuts',
+    'download_url': 'https://github.com/jpweiser/cuts/tarball/master',
     'author_email': 'jpweiser@email.arizona.edu',
-    'version': '0.32',
-    'install_requires': ['nose'],
+    'version': '0.37',
+    'install_requires': [],
     'packages': ['cuts'],
     'scripts': ['bin/cuts'],
     'name': 'cuts'
