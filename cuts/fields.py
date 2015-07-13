@@ -12,7 +12,7 @@ class FieldCutter(Cutter) :
         # Remove empty strings in case of multiple instances of delimiter
         line = [x for x in re.split(self.delimiter, line.rstrip()) if x != '']
 
-        for field in self.positions :
+        for i,field in enumerate(self.positions):
             try :
                 index = self.setup_index(field)
                 try :
@@ -22,12 +22,17 @@ class FieldCutter(Cutter) :
             except ValueError :
                 result += field
             except TypeError:
-                for i in range(int(field[0]),len(line)):
-                    index = self.setup_index(i)
+                for j in range(int(field[0]),len(line)):
+                    index = self.setup_index(j)
                     try:
                         result += line[index] + self.separator
                     except IndexError :
                         pass
                 result += line[-1]
+                try:
+                    int(self.positions[i+1])
+                    result += self.separator
+                except ValueError:
+                    pass
 
         return result

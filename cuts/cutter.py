@@ -16,8 +16,8 @@ class Cutter(object):
     def setup_positions(self, positions):
         updated_positions = []
 
-        for i in range(len(positions)):
-            ranger = re.search('(?P<start>-?\d*):(?P<end>\d*)', positions[i])
+        for i,position in enumerate(positions):
+            ranger = re.search('(?P<start>-?\d*):(?P<end>\d*)', position)
 
             if ranger:
 
@@ -35,7 +35,7 @@ class Cutter(object):
             else:
                 updated_positions.append(positions[i])
                 try:
-                    int(positions[i]), int(positions[i+1])
+                    int(position), int(positions[i+1])
                     updated_positions.append(self.separator)
                 except (ValueError,IndexError):
                     pass
