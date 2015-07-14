@@ -51,7 +51,7 @@ def main() :
         positions = parsed.chars
         cutter = CharCutter(positions)
         num_cutters += 1
-        
+
     if parsed.fields:
         positions = parsed.fields
         cutter = FieldCutter(positions, delim, parsed.separator)
@@ -65,14 +65,10 @@ def main() :
 
     # Check for possible specification of zero index, which is not allowed.
     # Regular expression checks for zero by itself, or in range specification
-    if filter(lambda position: re.search("^0:?|:0$",position), positions):
+    if list(filter(lambda position: re.search("^0:?|:0$",position), positions)):
         print('Zero is an invalid position.')
         parser.print_usage(file=sys.stderr)
         sys.exit(2)
-
-
-
-    read_mode = 'rb' if parsed.bytes else 'r'
 
     for line in fileinput.input(parsed.file, mode = read_mode):
         if parsed.skip and not re.search(parsed.delimiter,line):
