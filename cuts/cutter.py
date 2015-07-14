@@ -39,7 +39,7 @@ class Cutter(object):
 
         for i,field in enumerate(self.positions):
             try :
-                index = self.setup_index(field)
+                index = self._setup_index(field)
                 try :
                     result += line[index]
                 except IndexError:
@@ -69,14 +69,14 @@ class Cutter(object):
                 end = self._groupval(ranger.group('end'))
 
                 if start and end:
-                    updated_positions.append(self._appendrange(start,end))
+                    updated_positions.extend(self._extendrange(start,end))
                 # Since the number of positions on a line is unknown,
                 # send input to cause exception that can be caught and call
                 # _cut_range helper function
                 elif ranger.group('start'):
                     updated_positions.append([start])
                 else:
-                    updated_positions.append(self._appendrange(1,end))
+                    updated_positions.extend(self._extendrange(1,end))
             else:
                 updated_positions.append(positions[i])
                 try:
@@ -118,7 +118,7 @@ class Cutter(object):
         result = []
         try:
             for j in range(start,len(line)):
-                index = self.setup_index(j)
+                index = self._setup_index(j)
                 try:
                     result.append(line[index])
                 except IndexError :
@@ -148,7 +148,7 @@ class Cutter(object):
         else:
             return 0
 
-    def _appendrange(self,start,end):
+    def _extendrange(self,start,end):
         """Creates list of values in a range with output delimiters.
 
         Arguments:
@@ -159,6 +159,6 @@ class Cutter(object):
         for i in range(start,end):
             if i != 0:
                 range_positions.append(str(i))
-            if i < end - 1:
+            if i < end:
                 range_positions.append(self.separator)
         return range_positions
