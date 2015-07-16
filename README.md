@@ -81,6 +81,7 @@ Cuts input by character, as specified by LIST.
 Cuts input into fields separated by the input delimiter.
 
 Example:
+
     Input:
         echo "this is just a test" | cuts -f 1,X,3:5 -d " " -S "."
     Output:
