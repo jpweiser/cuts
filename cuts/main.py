@@ -8,8 +8,7 @@ def _lst(l):
     """Takes a string l and returns list split by comma"""
     return l.split(",")
 
-def main() :
-
+def parseArgs(args=sys.argv[1:]):
     # Setup argparser to process arguments and generate help
     parser = argparse.ArgumentParser(description="Remove and/or rearrange "
                                      + "sections from each line of a file(s).")
@@ -31,8 +30,11 @@ def main() :
     parser.add_argument('file', nargs='*' ,default="-",
                         help="File(s) to cut")
 
+    return parser.parse_args(args)
 
-    parsed = parser.parse_args(sys.argv[1:])
+def main() :
+
+    parsed = parseArgs()
 
     # Set delim based on whether or not regex is desired by user
     delim = parsed.delimiter if parsed.regex else re.escape(parsed.delimiter)
