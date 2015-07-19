@@ -50,11 +50,11 @@ characters will override the output delimiter with that character.
 
 Ranges are permitted in the list, using a colon as below
 
-N:M    All fields from N to M
+N:M    All input positions from N to M
 
-N:     All fields from N to end of line
+N:     All input positions from N to end of line
 
-:M     All fields from beginning of line to M
+:M     All input positions from beginning of line to M
 
 Position counting starts from one.
 
