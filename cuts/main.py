@@ -34,7 +34,7 @@ def _parseArgs(args=sys.argv[1:]):
 
 def main() :
 
-    parsed = parseArgs()
+    parsed = _parseArgs()
 
     # Set delim based on whether or not regex is desired by user
     delim = parsed.delimiter if parsed.regex else re.escape(parsed.delimiter)
