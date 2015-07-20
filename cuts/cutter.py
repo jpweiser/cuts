@@ -45,7 +45,7 @@ class Cutter(object):
                 except IndexError:
                     result.append(self.invalid_pos)
             except ValueError:
-                result.append(field)
+                result.append(str(field))
             except TypeError:
                 result.extend(self._cut_range(line,int(field[0]),i))
 
@@ -66,17 +66,17 @@ class Cutter(object):
                 if i > 0:
                     updated_positions.append(self.separator)
                 start = self._groupval(ranger.group('start'))
-                end = self._groupval(ranger.group('end')) + 1
+                end = self._groupval(ranger.group('end'))
 
                 if start and end:
-                    updated_positions.extend(self._extendrange(start,end))
+                    updated_positions.extend(self._extendrange(start,end + 1))
                 # Since the number of positions on a line is unknown,
                 # send input to cause exception that can be caught and call
                 # _cut_range helper function
                 elif ranger.group('start'):
                     updated_positions.append([start])
                 else:
-                    updated_positions.extend(self._extendrange(1,end))
+                    updated_positions.extend(self._extendrange(1,end + 1))
             else:
                 updated_positions.append(positions[i])
                 try:
@@ -94,7 +94,7 @@ class Cutter(object):
         Positive indicies need to be reduced by one to match with zero based
         indexing.
 
-        Zero is not a valid input, and as such will throw an exception.
+        Zero is not a valid input, and as such will throw a value error.
 
         Arguments:
             index -     index to shift
@@ -104,7 +104,7 @@ class Cutter(object):
             index -= 1
         elif index == 0:
             # Zero indicies should not be allowed by default.
-            raise IndexError
+            raise ValueError
         return index
 
     def _cut_range(self,line,start,current_position):
@@ -116,6 +116,7 @@ class Cutter(object):
             current_position -  current position in main cut function
         """
         result = []
+        print "here"
         try:
             for j in range(start,len(line)):
                 index = self._setup_index(j)
