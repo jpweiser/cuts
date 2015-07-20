@@ -66,7 +66,7 @@ class Cutter(object):
                 if i > 0:
                     updated_positions.append(self.separator)
                 start = self._groupval(ranger.group('start'))
-                end = self._groupval(ranger.group('end'))
+                end = self._groupval(ranger.group('end')) + 1
 
                 if start and end:
                     updated_positions.extend(self._extendrange(start,end))

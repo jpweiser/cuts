@@ -4,20 +4,19 @@
 import argparse, sys, fileinput, re, itertools
 from cuts import ByteCutter,CharCutter,FieldCutter
 
-def _lst(l):
+def lst(l):
     """Takes a string l and returns list split by comma"""
     return l.split(",")
 
-def main() :
-
+def _parseArgs(args=sys.argv[1:]):
     # Setup argparser to process arguments and generate help
     parser = argparse.ArgumentParser(description="Remove and/or rearrange "
                                      + "sections from each line of a file(s).")
-    parser.add_argument('-b',"--bytes", action='store', type=_lst, default=[],
+    parser.add_argument('-b',"--bytes", action='store', type=lst, default=[],
                         help="Bytes to select")
-    parser.add_argument('-c',"--chars", action='store', type=_lst, default=[],
+    parser.add_argument('-c',"--chars", action='store', type=lst, default=[],
                         help="Character to select")
-    parser.add_argument('-f',"--fields", action='store', type=_lst, default=[],
+    parser.add_argument('-f',"--fields", action='store', type=lst, default=[],
                         help="Fields to select")
     parser.add_argument('-d',"--delimiter", action='store',default="\t",
                         help="Sets field delimiter(default is TAB)")
@@ -31,8 +30,11 @@ def main() :
     parser.add_argument('file', nargs='*' ,default="-",
                         help="File(s) to cut")
 
+    return parser.parse_args(args)
 
-    parsed = parser.parse_args(sys.argv[1:])
+def main() :
+
+    parsed = _parseArgs()
 
     # Set delim based on whether or not regex is desired by user
     delim = parsed.delimiter if parsed.regex else re.escape(parsed.delimiter)
