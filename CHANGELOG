@@ -3,6 +3,7 @@ Version 0.37.5
 
 Reformatted usage string for improved readability
 Fixed issue with zero as a user defined separator
+Made end of ranges inclusive, as per original cut utility
 
 15-07-2015
 Version 0.37.2
