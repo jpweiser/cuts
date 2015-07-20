@@ -4,14 +4,36 @@
 import argparse, sys, fileinput, re, itertools
 from cuts import ByteCutter,CharCutter,FieldCutter
 
+def _usage():
+    prog_name = sys.argv[0]
+    usage = prog_name + ' -b LIST [-S SEPARATOR] [file ...]\n' \
+       + ' '*7 + prog_name + ' -c LIST [-S SEPERATOR] [file ...]\n' \
+       + ' '* 7 + prog_name \
+       + ' -f LIST [-d DELIM] [-e] [-S SEPERATOR] [-s] [file ...]'
+
+    # Return usage message with trailing whitespace removed.
+    return "usage: " + usage.rstrip()
+
 def lst(l):
-    """Takes a string l and returns list split by comma"""
+    """Takes a string l and returns list split by comma
+
+    Used to take comma delimited list from command line argument, and store
+    python list when parsing via argparser.
+
+    Example:
+    >>>lst("1,2,3,4")
+    [1,2,3,4]
+    """
     return l.split(",")
 
 def _parseArgs(args=sys.argv[1:]):
-    # Setup argparser to process arguments and generate help
+    """Setup argparser to process arguments and generate help"""
+
+    # parser uses custom usage string, with 'usage: ' removed, as it is
+    # added automatically via argparser.
     parser = argparse.ArgumentParser(description="Remove and/or rearrange "
-                                     + "sections from each line of a file(s).")
+                                     + "sections from each line of a file(s).",
+                                     usage = _usage()[len('usage: '):])
     parser.add_argument('-b',"--bytes", action='store', type=lst, default=[],
                         help="Bytes to select")
     parser.add_argument('-c',"--chars", action='store', type=lst, default=[],
@@ -39,8 +61,12 @@ def main() :
     # Set delim based on whether or not regex is desired by user
     delim = parsed.delimiter if parsed.regex else re.escape(parsed.delimiter)
 
-    positions = []
+    # Keep track of number of cutters used to allow error handling if
+    # multiple options selected (only one at a time is accepted)
     num_cutters = 0
+
+    # Read mode will be used as file read mode later. 'r' is default, changed
+    # to 'rb' in the event that binary read mode is selected by user
     read_mode = 'r'
 
     if parsed.bytes:
@@ -61,15 +87,15 @@ def main() :
 
     # Make sure only one option of -b,-c, or -f is used
     if num_cutters > 1:
-        print('Only one option permitted of -b, -c, -f.')
-        parser.print_usage(file=sys.stderr)
+        sys.stderr.write('Only one option permitted of -b, -c, -f.\n')
+        sys.stderr.write(_usage() + '\n')
         sys.exit(1)
 
     # Check for possible specification of zero index, which is not allowed.
     # Regular expression checks for zero by itself, or in range specification
     if list(filter(lambda position: re.search("^0:?|:0$",position), positions)):
-        print('Zero is an invalid position.')
-        parser.print_usage(file=sys.stderr)
+        sys.stderr.write('Zero is an invalid position.\n')
+        sys.stderr.write(_usage() + '\n')
         sys.exit(2)
 
     for line in fileinput.input(parsed.file, mode = read_mode):
