@@ -116,7 +116,6 @@ class Cutter(object):
             current_position -  current position in main cut function
         """
         result = []
-        print "here"
         try:
             for j in range(start,len(line)):
                 index = self._setup_index(j)
