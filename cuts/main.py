@@ -4,11 +4,11 @@
 import argparse, sys, fileinput, re, itertools
 from cuts import ByteCutter,CharCutter,FieldCutter
 
-def _usage():
-    prog_name = sys.argv[0]
+def _usage(prog_name='cuts'):
+    spacer = ' ' * len('usage: ')
     usage = prog_name + ' -b LIST [-S SEPARATOR] [file ...]\n' \
-       + ' '*7 + prog_name + ' -c LIST [-S SEPERATOR] [file ...]\n' \
-       + ' '* 7 + prog_name \
+       + spacer + prog_name + ' -c LIST [-S SEPERATOR] [file ...]\n' \
+       + spacer + prog_name \
        + ' -f LIST [-d DELIM] [-e] [-S SEPERATOR] [-s] [file ...]'
 
     # Return usage message with trailing whitespace removed.
@@ -43,7 +43,7 @@ def _parseArgs(args=sys.argv[1:]):
     parser.add_argument('-d',"--delimiter", action='store',default="\t",
                         help="Sets field delimiter(default is TAB)")
     parser.add_argument('-e', "--regex", action='store_true',
-                        help='Enable regular expressions to be used as input'+
+                        help='Enable regular expressions to be used as input '+
                               'delimiter')
     parser.add_argument('-s','--skip', action='store_true',
                         help="Skip lines that do not contain input delimiter.")
