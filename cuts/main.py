@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import argparse, sys, fileinput, re, itertools
+import argparse, sys, fileinput, re, itertools, os
 from cuts import ByteCutter,CharCutter,FieldCutter
 
-def _usage(prog_name='cuts'):
+def _usage(prog_name=os.path.basename(sys.argv[0])):
     spacer = ' ' * len('usage: ')
     usage = prog_name + ' -b LIST [-S SEPARATOR] [file ...]\n' \
        + spacer + prog_name + ' -c LIST [-S SEPERATOR] [file ...]\n' \
@@ -55,7 +55,7 @@ def _parseArgs(args=sys.argv[1:]):
     return parser.parse_args(args)
 
 def main() :
-
+    print __file__
     parsed = _parseArgs()
 
     # Set delim based on whether or not regex is desired by user
