@@ -55,7 +55,6 @@ def _parseArgs(args=sys.argv[1:]):
     return parser.parse_args(args)
 
 def main() :
-    print __file__
     parsed = _parseArgs()
 
     # Set delim based on whether or not regex is desired by user
@@ -93,7 +92,7 @@ def main() :
 
     # Check for possible specification of zero index, which is not allowed.
     # Regular expression checks for zero by itself, or in range specification
-    if list(filter(lambda position: re.search("^0:?|:0$",position), positions)):
+    if [n for n in positions if re.search("0:?|0$",n)]:
         sys.stderr.write('Zero is an invalid position.\n')
         sys.stderr.write(_usage() + '\n')
         sys.exit(2)
