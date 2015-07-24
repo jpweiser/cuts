@@ -11,7 +11,7 @@ config = {
     'url': 'https://github.com/jpweiser/cuts',
     'download_url': 'https://github.com/jpweiser/cuts/tarball/master',
     'author_email': 'jon@jpweiser.com',
-    'version': '0.37.5',
+    'version': '0.37.6',
     'install_requires': [],
     'packages': ['cuts'],
     'scripts': ['bin/cuts'],
