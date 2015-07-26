@@ -13,16 +13,16 @@ class FieldCutter(Cutter):
     """Cuts line into specified fields based on input delimiter.
     Arguments:
         fields -       List that specifies which fields to return in which order
-        delimiter -    Input delimeter. Can be regular expression.
+        delim -        Input delimeter. Can be regular expression.
                        (default '\\t')
-        separator -    Output delimiter. (default '\\t')
+        sep -          Output delimiter. (default '\\t')
         no_field -     Determines output if invalid field position is specified
     """
-    def __init__(self,fields,delimiter="\t",separator="\t",no_field="<NONE>"):
-        super(FieldCutter,self).__init__(fields,separator,invalid_pos=no_field)
-        self.delimiter = delimiter
+    def __init__(self, fields, delim="\t", sep="\t", no_field="<NONE>"):
+        super(FieldCutter, self).__init__(fields, sep, invalid_pos=no_field)
+        self.delimiter = delim
 
-    def _line(self,line):
+    def line(self, line):
         """Returns list of strings split by input delimeter
 
         Argument:

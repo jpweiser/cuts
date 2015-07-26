@@ -24,7 +24,7 @@ class Cutter(object):
         self.invalid_pos = invalid_pos
 
     @abc.abstractmethod
-    def _line(self,line):
+    def line(self,line):
         """Returns prepared line for cutting"""
 
     def cut(self,line):
@@ -35,7 +35,7 @@ class Cutter(object):
             line -      input to cut
         """
         result = []
-        line = self._line(line)
+        line = self.line(line)
 
         for i,field in enumerate(self.positions):
             try :
