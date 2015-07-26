@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 ''' cuts
 '''
+from __future__ import print_function
 import argparse, sys, fileinput, re, os
 from cuts.bytes import ByteCutter
 from cuts.chars import CharCutter
