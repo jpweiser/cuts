@@ -3,7 +3,7 @@
 """ chars.py is part of cuts
 This module provides the CharCutter object.
 """
-from cuts.cutter import Cutter
+from .cutter import Cutter
 
 class CharCutter(Cutter):
     """Cuts line into specified characters based on input delimiter.

@@ -3,7 +3,9 @@
 ''' cuts
 '''
 import argparse, sys, fileinput, re, os
-from cuts import ByteCutter, CharCutter, FieldCutter
+from .bytes import ByteCutter
+from .chars import CharCutter
+from .fields import FieldCutter
 
 def _usage(prog_name=os.path.basename(sys.argv[0])):
     '''Returns usage string with no trailing whitespace.'''
@@ -110,7 +112,9 @@ def main(args=sys.argv[1:]):
             if parsed.skip and not re.search(parsed.delimiter, line):
                 pass
             else:
-                print(cutter.cut(line))
+                # Using sys.stdout.write for consistency between Py 2 and 3,
+                # keeping linter happy
+                sys.stdout.write(cutter.cut(line) + '\n')
     except IOError:
         sys.stderr.write('File \'' + fileinput.filename()
                          + '\' could not be found.\n')

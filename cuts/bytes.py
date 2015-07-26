@@ -3,7 +3,7 @@
 """ bytes.py is part of cuts
 This module provides the ByteCutter object.
 """
-from cuts.cutter import Cutter
+from .cutter import Cutter
 
 class ByteCutter(Cutter):
     """Cuts line into specified bytes based on input delimiter.
