@@ -111,7 +111,7 @@ def main(args=sys.argv[1:]):
                 pass
             else:
                 print(cutter.cut(line))
-    except FileNotFoundError:
+    except IOError:
         sys.stderr.write('File \'' + fileinput.filename()
                          + '\' could not be found.\n')
         sys.exit(3)
