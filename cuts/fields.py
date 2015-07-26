@@ -7,7 +7,7 @@ This module provides the FieldCutter object.
 FieldCutter -     Cuts line into fields based on input delimiter
 """
 import re
-from .cutter import Cutter
+from cuts.cutter import Cutter
 
 class FieldCutter(Cutter):
     """Cuts line into specified fields based on input delimiter.
