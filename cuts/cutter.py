@@ -5,7 +5,37 @@ This module provides the Cutter class, the base for all Cutter classes in the
 cuts package.
 """
 
-import abc, re, sys
+import abc, re
+
+def group_val(group):
+    """Returns value of regular expression group, if valid. 0 if not
+
+    Argument:
+        group - group to get value of
+    """
+    if group:
+        return int(group)
+    else:
+        return 0
+
+def _setup_index(index):
+    """Shifts indicies as needed to account for one based indexing
+
+    Positive indicies need to be reduced by one to match with zero based
+    indexing.
+
+    Zero is not a valid input, and as such will throw a value error.
+
+    Arguments:
+        index -     index to shift
+    """
+    index = int(index)
+    if index > 0:
+        index -= 1
+    elif index == 0:
+        # Zero indicies should not be allowed by default.
+        raise ValueError
+    return index
 
 class Cutter(object):
     """Base class for cutters, such as FieldCutter, CharCutter, and ByteCutter
@@ -18,16 +48,16 @@ class Cutter(object):
 
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self,positions,separator,invalid_pos=''):
+    def __init__(self, positions, separator, invalid_pos=''):
         self.separator = separator
         self.positions = self._setup_positions(positions)
         self.invalid_pos = invalid_pos
 
     @abc.abstractmethod
-    def line(self,line):
+    def line(self, line):
         """Returns prepared line for cutting"""
 
-    def cut(self,line):
+    def cut(self, line):
         """Returns selected positions from cut input source in desired
         arrangement.
 
@@ -37,17 +67,17 @@ class Cutter(object):
         result = []
         line = self.line(line)
 
-        for i,field in enumerate(self.positions):
-            try :
-                index = self._setup_index(field)
-                try :
+        for i, field in enumerate(self.positions):
+            try:
+                index = _setup_index(field)
+                try:
                     result += line[index]
                 except IndexError:
                     result.append(self.invalid_pos)
             except ValueError:
                 result.append(str(field))
             except TypeError:
-                result.extend(self._cut_range(line,int(field[0]),i))
+                result.extend(self._cut_range(line, int(field[0]), i))
 
         return ''.join(result)
 
@@ -59,55 +89,36 @@ class Cutter(object):
         """
         updated_positions = []
 
-        for i,position in enumerate(positions):
-            ranger = re.search('(?P<start>-?\d*):(?P<end>\d*)', position)
+        for i, position in enumerate(positions):
+            ranger = re.search(r'(?P<start>-?\d*):(?P<end>\d*)', position)
 
             if ranger:
                 if i > 0:
                     updated_positions.append(self.separator)
-                start = self._groupval(ranger.group('start'))
-                end = self._groupval(ranger.group('end'))
+                start = group_val(ranger.group('start'))
+                end = group_val(ranger.group('end'))
 
                 if start and end:
-                    updated_positions.extend(self._extendrange(start,end + 1))
+                    updated_positions.extend(self._extendrange(start, end + 1))
                 # Since the number of positions on a line is unknown,
                 # send input to cause exception that can be caught and call
                 # _cut_range helper function
                 elif ranger.group('start'):
                     updated_positions.append([start])
                 else:
-                    updated_positions.extend(self._extendrange(1,end + 1))
+                    updated_positions.extend(self._extendrange(1, end + 1))
             else:
                 updated_positions.append(positions[i])
                 try:
-                    int(position), int(positions[i+1])
-                    updated_positions.append(self.separator)
-                except (ValueError,IndexError):
+                    if int(position) and int(positions[i+1]):
+                        updated_positions.append(self.separator)
+                except (ValueError, IndexError):
                     pass
 
         return updated_positions
 
 
-    def _setup_index(self, index):
-        """Shifts indicies as needed to account for one based indexing
-
-        Positive indicies need to be reduced by one to match with zero based
-        indexing.
-
-        Zero is not a valid input, and as such will throw a value error.
-
-        Arguments:
-            index -     index to shift
-        """
-        index = int(index)
-        if index > 0 :
-            index -= 1
-        elif index == 0:
-            # Zero indicies should not be allowed by default.
-            raise ValueError
-        return index
-
-    def _cut_range(self,line,start,current_position):
+    def _cut_range(self, line, start, current_position):
         """Performs cut for range from start position to end
 
         Arguments:
@@ -117,11 +128,11 @@ class Cutter(object):
         """
         result = []
         try:
-            for j in range(start,len(line)):
-                index = self._setup_index(j)
+            for j in range(start, len(line)):
+                index = _setup_index(j)
                 try:
                     result.append(line[index])
-                except IndexError :
+                except IndexError:
                     result.append(self.invalid_pos)
                 finally:
                     result.append(self.separator)
@@ -132,23 +143,14 @@ class Cutter(object):
         try:
             int(self.positions[current_position+1])
             result.append(self.separator)
-        except (ValueError,IndexError):
+        except (ValueError, IndexError):
             pass
 
         return result
 
-    def _groupval(self,group):
-        """Returns value of regular expression group, if valid. 0 if not
 
-        Argument:
-            group - group to get value of
-        """
-        if group:
-            return int(group)
-        else:
-            return 0
 
-    def _extendrange(self,start,end):
+    def _extendrange(self, start, end):
         """Creates list of values in a range with output delimiters.
 
         Arguments:
@@ -156,7 +158,7 @@ class Cutter(object):
             end -       range end
         """
         range_positions = []
-        for i in range(start,end):
+        for i in range(start, end):
             if i != 0:
                 range_positions.append(str(i))
             if i < end:
