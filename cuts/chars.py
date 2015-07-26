@@ -12,10 +12,10 @@ class CharCutter(Cutter):
         separator -    Output delimiter. (default '')
         no_field -     Determines output if invalid field position is specified
     """
-    def __init__(self,chars,separator='',no_field=''):
-        super(CharCutter,self).__init__(chars,separator,invalid_pos=no_field)
+    def __init__(self, chars, separator='', no_field=''):
+        super(CharCutter, self).__init__(chars, separator, invalid_pos=no_field)
 
-    def _line(self,line):
+    def line(self, line):
         """Returns string with trailing whitespace characters removed
 
         Argument:

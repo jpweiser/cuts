@@ -1,7 +1,7 @@
-23-07-2015
-Version 0.37.6
+25-07-2015
+Version 0.37.7
 
-[Updated] Fixed issue when no arguments provided
+[Updated] Handle IO exception
 
 20-07-2015
 Version 0.37.5
