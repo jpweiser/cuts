@@ -12,9 +12,14 @@ delimiters.
 
 ## Usage
 
-usage: cuts [-h] [-b BYTES] [-c CHARS] [-f FIELDS] [-d DELIMITER] [-e] [-s]
-            [-S SEPARATOR]
-            [file [file ...]]
+usage: 
+
+
+
+       cuts -b LIST [-S SEPARATOR] [file ...]
+       cuts -c LIST [-S SEPERATOR] [file ...]
+       cuts -f LIST [-d DELIM] [-e] [-S SEPERATOR] [-s] [file ...]
+
 
 Remove and/or rearrange sections from each line of a file(s).
 
